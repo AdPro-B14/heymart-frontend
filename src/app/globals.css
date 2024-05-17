@@ -31,3 +31,21 @@ body {
     text-wrap: balance;
   }
 }
+
+input {
+  background-color: theme('colors.gray.100');
+}
+
+input:focus {
+  border: 3px solid theme('colors.dark-green-2');
+  outline: none;
+}
+
+button {
+  background-color: theme('colors.dark-green');
+  color: white;
+}
+
+button:hover {
+  background-color: theme('colors.dark-green-2');
+}
