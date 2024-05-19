@@ -72,10 +72,10 @@ function AdminDashboardPage() {
         //         .includes(searchQuery.trim().toLowerCase())
         // )
         .map((item) => (
-            <div className="flex rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer">
-                <h1 className="font-bold text-black text-sm hover:drop-shadow-xl">{item.name}</h1>
+            <div className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
+                <Image src={`https://ui-avatars.com/api/?rounded=true&name=${item.name}`} width={50} height={50} alt={item.name}/>
+                <h1 className="font-bold text-black text-sm">{item.name}</h1>
             </div>
-            // Item HTML here (see previous code block)
         ));
 
     return (
