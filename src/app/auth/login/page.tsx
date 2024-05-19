@@ -6,10 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { useAuth } from "@/context/auth_context";
 
 export default function SignUpPage() {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState({ email: "", password: "" });
+    const { login } = useAuth();
     const router = useRouter();
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -31,15 +34,7 @@ export default function SignUpPage() {
         setError(newError);
         if (!formIsValid) return;
         
-        const res = await axiosInstance.post('/api/auth/login', formData);
-        
-        if (res.status === 200) {
-            toast.success("Sign in successful");
-            localStorage.setItem('token', res.data.token);
-            router.push('/dashboard');
-        } else {
-            toast.error(res.data);
-        }
+        login(formData.email, formData.password);
     }
 
     return (
