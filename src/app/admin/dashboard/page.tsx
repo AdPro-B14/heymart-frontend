@@ -23,12 +23,21 @@ interface Product {
 
 function AdminDashboardPage() {
     const [supermarkets, setSupermarkets] = useState<Supermarket[]>([]);
-    const [formData, setFormData] = useState({
+    const [selectedSupermarket, setSelectedSupermarket] = useState<Supermarket>({ id: 0, name: "", managers: [], products: []});
+    const [formCreateSupermarketData, setFormCreateSupermarketData] = useState({
         name: "",
         address: ""
     });
-    const [error, setError] = useState({ name: "", address: "" });
+    const [formAddManagerData, setFormAddManagerData] = useState({
+        name: "",
+        email: "",
+        password: ""
+    });
+    const [errorSupermarket, setErrorSupermarket] = useState({ name: "", address: "" });
+    const [errorManager, setErrorManager] = useState({ name: "", email: "", password: "" });
     const [openCreateModal, setOpenCreateModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [openManagerModal, setOpenManagerModal] = useState(false);
 
     const handleCreateSupermarket = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -36,16 +45,72 @@ function AdminDashboardPage() {
         const newError = { name: "", address: "" };
         let formIsValid = true;
 
-        if (!formData.name) {
+        if (!formCreateSupermarketData.name) {
             formIsValid = false;
             newError.name = "Name is required";
         }
         
-        setError(newError);
+        setErrorSupermarket(newError);
         if (!formIsValid) return;
         
-        const res = await axiosInstance.post('/api/store/supermarket/create-supermarket', formData);
+        const res = await axiosInstance.post('/api/store/supermarket/create-supermarket', formCreateSupermarketData);
         setOpenCreateModal(false);
+    }
+
+    const handleEditSupermarket = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const newError = { name: "", address: "" };
+        let formIsValid = true;
+
+        if (!selectedSupermarket.name) {
+            formIsValid = false;
+            newError.name = "Name is required";
+        }
+        
+        setErrorSupermarket(newError);
+        if (!formIsValid) return;
+        
+        console.log(selectedSupermarket);
+        const res = await axiosInstance.put(`/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}`, selectedSupermarket);
+        setOpenEditModal(false);
+    }
+
+    const handleAddManager = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const newError = { name: "", email: "", password: "" };
+        let formIsValid = true;
+
+        if (!formAddManagerData.name) {
+            formIsValid = false;
+            newError.name = "Name is required";
+        }
+
+        if (!formAddManagerData.email) {
+            formIsValid = false;
+            newError.email = "Email is required";
+        }
+        
+        if (!formAddManagerData.password) {
+            formIsValid = false;
+            newError.password = "Password is required";
+        }
+        
+        setErrorManager(newError);
+        if (!formIsValid) return;
+        
+        const res = await axiosInstance.put(`/api/store/supermarket/add-manager/${selectedSupermarket.id}`, formAddManagerData);
+        
+        axiosInstance.get('/api/store/supermarket/supermarket', { params: { id: selectedSupermarket.id } })
+            .then(res => {
+                setSelectedSupermarket(res.data);
+            }).catch(err => {
+                console.log(err);
+            });
+
+        setOpenManagerModal(false);
+        setOpenEditModal(true);
     }
 
     useEffect(() => {
@@ -56,7 +121,7 @@ function AdminDashboardPage() {
             }).catch(err => {
                 console.log(err);
             });
-    }, [openCreateModal]);
+    }, [openCreateModal, openEditModal]);
 
     const displayedItems = supermarkets
         // .filter(
@@ -72,7 +137,7 @@ function AdminDashboardPage() {
         //         .includes(searchQuery.trim().toLowerCase())
         // )
         .map((item) => (
-            <div className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
+            <div key={`supermarket-${item.id}`} id={`supermarket-${item.id}`} onClick={() => { setOpenEditModal(true); setSelectedSupermarket(item); }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
                 <Image src={`https://ui-avatars.com/api/?rounded=true&name=${item.name}`} width={50} height={50} alt={item.name}/>
                 <h1 className="font-bold text-black text-sm">{item.name}</h1>
             </div>
@@ -122,13 +187,13 @@ function AdminDashboardPage() {
                     </div>
                 </div>
                 {/* create supermarket modal */}
-                <Modal open={openCreateModal} onClose={() => setOpenCreateModal(!open)} className="w-[600px]">
+                <Modal open={openCreateModal} onClose={() => setOpenCreateModal(!openCreateModal)} className="w-[600px]">
                     <form onSubmit={handleCreateSupermarket} className="space-y-6">
                         <div className="flex flex-col text-black space-y-2">
                             <label className="text-black font-bold" htmlFor="name">Name</label> 
-                            <input onChange={(e) => setFormData({...formData, name: e.target.value})} type="text" name="name" id="name" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setFormCreateSupermarketData({...formCreateSupermarketData, name: e.target.value})} type="text" name="name" id="name" className="p-2 rounded-lg"/>
                             {
-                                error.name && <p className="text-red-500 text-sm">{error.name}</p>
+                                errorSupermarket.name && <p className="text-red-500 text-sm">{errorSupermarket.name}</p>
                             }
                         </div>
                         {/* <div className="flex flex-col text-black space-y-2">
@@ -144,6 +209,73 @@ function AdminDashboardPage() {
                     </form>
                 </Modal>
                 {/* modify supermarket modal */}
+                <Modal title="Edit Supermarket" open={openEditModal} onClose={() => setOpenEditModal(!openEditModal)} className="w-[700px]">
+                    <form onSubmit={handleEditSupermarket} className="space-y-6 flex flex-col">
+                        <div className="flex flex-col text-black space-y-2">
+                            <label className="text-black font-bold" htmlFor="name">Name</label> 
+                            <input onChange={(e) => setSelectedSupermarket({...selectedSupermarket, name: e.target.value})} defaultValue={selectedSupermarket.name} type="text" name="name" id="name" className="p-2 rounded-lg"/>
+                            {
+                                errorSupermarket.name && <p className="text-red-500 text-sm">{errorSupermarket.name}</p>
+                            }
+                        </div>
+                        <div className="space-y-2 flex flex-col">
+                            <label className="text-black font-bold" htmlFor="managers">Manager</label>
+                            {
+                                selectedSupermarket.managers.map(manager => (
+                                    <div key={`manager-${manager}`} id={`manager-${manager}`} className="flex space-x-2">
+                                        <input readOnly={true} type="text" defaultValue={manager} className="p-2 rounded-lg w-full font-bold text-black"/>
+                                        <button className="text-white bg-red-500 hover:bg-red-700 p-2 rounded-lg" onClick={(e) => {
+                                            e.preventDefault();
+                                            setSelectedSupermarket({
+                                                ...selectedSupermarket,
+                                                managers: selectedSupermarket.managers.filter(m => m !== manager)
+                                            })
+                                        }}>Remove</button>
+                                    </div>
+                                ))
+                            }
+                            {/* button to create new manager */}
+                            <button onClick={() => {setOpenManagerModal(true); setOpenEditModal(false);}} className="text-white bg-green-500 p-2 rounded-lg">Add Manager</button>
+                        </div>
+                        {/* <div className="flex flex-col text-black space-y-2">
+                            <label className="text-black font-bold" htmlFor="address">Address</label> 
+                            <input onChange={(e) => setFormData({...formData, address: e.target.value})} type="text" name="address" id="address" className="p-2 rounded-lg"/>
+                            {
+                                error.name && <p className="text-red-500 text-sm">{error.name}</p>
+                            }
+                        </div> */}
+                        <div className="space-y-2 my-2">
+                            <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Done</button>
+                        </div>
+                    </form>
+                </Modal>
+                {/* add manager modal */}
+                <Modal title="Create Manager Account" open={openManagerModal} onClose={() => {setOpenManagerModal(!openManagerModal); setOpenEditModal(true)}} className="w-[700px]">
+                    <form className="space-y-6" onSubmit={handleAddManager}>
+                        <div className="flex flex-col text-black space-y-2">
+                            <label className="text-black font-bold" htmlFor="name">Name</label> 
+                            <input onChange={(e) => setFormAddManagerData({...formAddManagerData, name: e.target.value})} type="text" name="name" id="name" placeholder="Andi" className="p-2 rounded-lg"/>
+                            {
+                                errorManager.name && <p className="text-red-500 text-sm">{errorManager.name}</p>
+                            }
+                        </div>
+                        <div className="flex flex-col text-black space-y-2">
+                            <label className="text-black font-bold" htmlFor="email">Email</label> 
+                            <input onChange={(e) => setFormAddManagerData({...formAddManagerData, email: e.target.value})} type="text" name="email" id="email" placeholder="youremail@gmail.com" className="p-2 rounded-lg"/>
+                            {
+                                errorManager.email && <p className="text-red-500 text-sm">{errorManager.email}</p>
+                            }
+                        </div>
+                        <div className="flex flex-col text-black space-y-2">
+                            <label className="text-black font-bold" htmlFor="password">Password</label> 
+                            <input onChange={(e) => setFormAddManagerData({...formAddManagerData, password: e.target.value})} type="password" name="password" id="password" className="p-2 rounded-lg"/>
+                            {
+                                errorManager.password && <p className="text-red-500 text-sm">{errorManager.password}</p>
+                            }
+                        </div>
+                        <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+                    </form>
+                </Modal>
             </section>
         </>
     );
