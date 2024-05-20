@@ -72,6 +72,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
             role: "",
             balance: 0
         });
+        setIsLoggedIn(false);
     };
 
     useEffect(() => {
@@ -90,7 +91,10 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
                     }).catch(err => {
                         console.log(err);
                     });
+                setIsLoggedIn(true);
             }
+        } else {
+            setIsLoading(false);
         }
     }, []);
 

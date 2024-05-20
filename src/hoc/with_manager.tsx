@@ -6,14 +6,19 @@ const withManager = <T extends object>(Component: ComponentType<T>) => {
     return function WithManager(props: T) {
         const [loading, setLoading] = useState(true);
         const router = useRouter();
-        const { user } = useAuth();
+        const { user, isLoggedIn } = useAuth();
 
         useEffect(() => {
-            if (user.role.toLowerCase() !== 'manager') {
+            if (!isLoggedIn) {
                 router.replace('/auth/login');
+                return;
+            }
+            
+            if (user.role.toLowerCase() !== 'manager') {
+                router.replace(`/${user.role.toLowerCase()}/dashboard`);
             }
             setLoading(false);
-        }, []);
+        }, [user]);
 
         return !loading ? <Component {...props} /> : <div></div>
     }
