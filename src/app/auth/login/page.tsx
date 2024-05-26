@@ -61,7 +61,7 @@ export default function SignUpPage() {
                         <div className="space-y-2">
                             <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign in</button>
                             <p className="flex text-sm font-light text-gray-500 dark:text-gray-400 justify-center">
-                                Don't have an account yet?
+                                Don&apos;t have an account yet?
                                 <Link href="/auth/register" className="font-medium text-dark-green-2 hover:underline ml-2">Sign up</Link>
                             </p>
                         </div>
