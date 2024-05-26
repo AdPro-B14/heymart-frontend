@@ -4,6 +4,7 @@ import Modal from "@/components/modal";
 import axiosInstance from "@/helpers/axios_interceptor";
 import withCustomer from "@/hoc/with_customer";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 interface Supermarket {
@@ -18,11 +19,14 @@ interface Product {
     name: string;
     price: number;
     stock: number;
+    supermarket_id: number;
 }
 
 function AdminDashboardPage() {
     const [supermarkets, setSupermarkets] = useState<Supermarket[]>([]);
     const [selectedSupermarket, setSelectedSupermarket] = useState<Supermarket>({ id: 0, name: "", managers: [], products: []});
+    const [openProductModal, setOpenProductModal] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         axiosInstance.get('/api/store/supermarket/all-supermarket')
@@ -35,20 +39,8 @@ function AdminDashboardPage() {
     }, []);
 
     const displayedItems = supermarkets
-        // .filter(
-        //     (item) =>
-        //     // selectedCategories.length === 0 ||
-        //     // selectedCategories.includes(item.category)
-        // )
-        // .filter(
-        //     (item) =>
-        //     item.name.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
-        //     item.category
-        //         .toLowerCase()
-        //         .includes(searchQuery.trim().toLowerCase())
-        // )
         .map((item) => (
-            <div key={`supermarket-${item.id}`} id={`supermarket-${item.id}`} onClick={() => { setSelectedSupermarket(item); }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
+            <div key={`supermarket-${item.id}`} id={`supermarket-${item.id}`} onClick={() => { router.push(`/customer/dashboard/${item.id}`);  }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
                 <Image src={`https://ui-avatars.com/api/?rounded=true&name=${item.name}`} width={50} height={50} alt={item.name}/>
                 <h1 className="font-bold text-black text-sm">{item.name}</h1>
             </div>
