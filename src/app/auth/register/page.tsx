@@ -18,7 +18,6 @@ export default function SignUpPage() {
         const newError = { name: "", email: "", password: "" };
         let formIsValid = true;
 
-        console.log(formData);
         if (!formData.name) {
             formIsValid = false;
             newError.name = "Name is required";
