@@ -103,6 +103,17 @@ function ManagerDashboardPage() {
         setOpenEditModal(false);
     }
 
+    const handleDeleteProduct = async () => {
+        try {
+            const res = await axiosInstance.post('/api/store/product/delete', { UUID: selectedProduct.id });
+            setOpenEditModal(false);
+        } 
+        catch (error) {
+            console.log(error);
+            setOpenEditModal(false);
+        }
+    }
+
     useEffect(() => {
         axiosInstance.get(`/api/store/product/all-product/${user.manager_supermarket_id}`)
             .then(res => {
@@ -150,7 +161,7 @@ function ManagerDashboardPage() {
                         </article>
                     </div>
                 </div>
-                {/* create supermarket modal */}
+
                 <Modal open={openCreateModal} onClose={() => setOpenCreateModal(!openCreateModal)} className="w-[600px]">
                     <form onSubmit={handleCreateProduct} className="space-y-6">
                     <div className="flex flex-col text-black space-y-2">
@@ -204,6 +215,7 @@ function ManagerDashboardPage() {
                         </div>
                         <div className="space-y-2 my-2">
                             <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Done</button>
+                            <button type="button" onClick={handleDeleteProduct} className="w-full focus:ring-4 focus:outline-none focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-red-500">Delete</button>
                         </div>
                     </form>
                 </Modal>
