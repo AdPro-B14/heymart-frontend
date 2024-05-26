@@ -103,6 +103,17 @@ function ManagerDashboardPage() {
         setOpenEditModal(false);
     }
 
+    const handleDeleteProduct = async () => {
+        try {
+            const res = await axiosInstance.post('/api/store/product/delete', { UUID: selectedProduct.id });
+            setOpenEditModal(false);
+        } 
+        catch (error) {
+            console.log(error);
+            setOpenEditModal(false);
+        }
+    }
+
     useEffect(() => {
         axiosInstance.get(`/api/store/product/all-product/${user.manager_supermarket_id}`)
             .then(res => {
@@ -150,7 +161,7 @@ function ManagerDashboardPage() {
                         </article>
                     </div>
                 </div>
-                {/* create supermarket modal */}
+
                 <Modal open={openCreateModal} onClose={() => setOpenCreateModal(!openCreateModal)} className="w-[600px]">
                     <form onSubmit={handleCreateProduct} className="space-y-6">
                     <div className="flex flex-col text-black space-y-2">
@@ -162,14 +173,14 @@ function ManagerDashboardPage() {
                         </div>
                         <div className="flex flex-col text-black space-y-2">
                             <label className="text-black font-bold" htmlFor="stock">Stock</label> 
-                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, stock: e.target.value})} type="number" name="stock" id="stock" placeholder="0" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, stock: +e.target.value})} type="number" name="stock" id="stock" placeholder="0" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.stock && <p className="text-red-500 text-sm">{errorProduct.stock}</p>
                             }
                         </div>
                         <div className="flex flex-col text-black space-y-2">
                             <label className="text-black font-bold" htmlFor="price">Price</label> 
-                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, price: e.target.value})} type="number" name="price" id="price" placeholder="0" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, price: +e.target.value})} type="number" name="price" id="price" placeholder="0" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.price && <p className="text-red-500 text-sm">{errorProduct.price}</p>
                             }
@@ -191,12 +202,12 @@ function ManagerDashboardPage() {
                             }
 
                             <label className="text-black font-bold" htmlFor="stock">Stock</label> 
-                            <input onChange={(e) => setSelectedProduct({...selectedProduct, stock: e.target.value})} defaultValue={selectedProduct.stock} type="number" name="stock" id="stock" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setSelectedProduct({...selectedProduct, stock: +e.target.value})} defaultValue={selectedProduct.stock} type="number" name="stock" id="stock" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.stock && <p className="text-red-500 text-sm">{errorProduct.stock}</p>
                             }
                             <label className="text-black font-bold" htmlFor="price">Price</label> 
-                            <input onChange={(e) => setSelectedProduct({...selectedProduct, price: e.target.value})} defaultValue={selectedProduct.price} type="number" name="price" id="price" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setSelectedProduct({...selectedProduct, price: +e.target.value})} defaultValue={selectedProduct.price} type="number" name="price" id="price" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.price && <p className="text-red-500 text-sm">{errorProduct.price}</p>
                             }
@@ -204,6 +215,7 @@ function ManagerDashboardPage() {
                         </div>
                         <div className="space-y-2 my-2">
                             <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Done</button>
+                            <button type="button" onClick={handleDeleteProduct} className="w-full focus:ring-4 focus:outline-none focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-red-500">Delete</button>
                         </div>
                     </form>
                 </Modal>

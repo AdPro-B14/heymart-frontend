@@ -6,7 +6,8 @@ import withManager from "@/hoc/with_manager";
 import withAuth from "@/hoc/with_auth";
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth_context";
 
 
@@ -47,8 +48,10 @@ function ProductPage( { params }: {
     
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product>({ id: "", name: "", price:0, stock:0, supermarketId: 0});
+    const [error, setError] = useState<string | null>(null);
     
     const { user, isLoggedIn } = useAuth();
+    const router = useRouter();
 
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openTransactionCouponModal, setOpenTransactionCouponModal] = useState(false);
@@ -82,7 +85,7 @@ function ProductPage( { params }: {
             newError.stock = "Stock is not valid";
         }
         
-        setErrorProduct(newError);
+        // setErrorProduct(newError);
         if (!formIsValid) return;
         
         const res = await axiosInstance.put(`/api/store/product/edit`);
@@ -111,6 +114,23 @@ function ProductPage( { params }: {
         } catch (error) {
             console.error("Error fetching coupons:", error);
         }
+    const handleAddToCart = async () => {
+        try {
+            const res = await axiosInstance.post(`/api/order/keranjang/add-product`, {
+                productId: selectedProduct.id,
+                supermarketId: params.id 
+            });
+            console.log('Product added to cart:', res.data);
+            setOpenEditModal(false);
+        } catch (error) {
+            console.error('Error adding product to cart:', error);
+            setError('Failed to add product to cart. Please try again.');
+        }
+    };
+    
+    const closeModal = () => {
+        setOpenEditModal(false);
+        setError(null);
     };
     
     useEffect(() => {
@@ -122,6 +142,25 @@ function ProductPage( { params }: {
                 console.log(err);
             });
     }, [openEditModal]);
+
+    useEffect(() => {
+        const checkAndCreateCart = async () => {
+            try {
+                const cartRes = await axiosInstance.get(`/api/order/keranjang`);
+                // if (!cartRes.data) {
+                //     await axiosInstance.post(`/api/order/keranjang/create`);
+                //     console.log('Cart created');
+                // } else {
+                    console.log('Cart exists');
+                // }
+            } catch (err) {
+                await axiosInstance.post(`/api/order/keranjang/create`);
+                console.log("Cart created");
+            }
+        };
+
+        checkAndCreateCart();
+    }, []);
 
     const displayedItems = products
         .map((item) => (
@@ -154,6 +193,14 @@ function ProductPage( { params }: {
                         </article>
                     </div>
                 </div>
+                <div className="flex justify-center w-full my-4">
+                    <button
+                        onClick={() => router.push('/customer/cart')}
+                        className="bg-blue-500 text-white p-2 rounded-lg"
+                    >
+                        Go to Cart
+                    </button>
+                </div>
                 <Modal title="Product" open={openEditModal} onClose={() => setOpenEditModal(!openEditModal)} className="w-[700px]">
                     <form onSubmit={handleEditProduct} className="space-y-6 flex flex-col">
                         <div className="flex flex-col text-black space-y-2">
@@ -161,7 +208,7 @@ function ProductPage( { params }: {
 
                         </div>
                         <div className="space-y-2 my-2">
-                            <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add to Cart</button>
+                        <button type="button" onClick={handleAddToCart} className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add to Cart</button>
                         </div>
                     </form>
                 </Modal>
@@ -192,10 +239,15 @@ function ProductPage( { params }: {
                     </div> 
                 </Modal> 
                 
+                <Modal title="Error" open={!!error} onClose={closeModal} className="w-[700px]">
+                    <div className="text-center">Failed to add product to cart. Please try again.</div>
+                </Modal>
+            
             </section>
+
         </>
     );
-    
+}
 };
 
 export default ProductPage;
