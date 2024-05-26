@@ -162,14 +162,14 @@ function ManagerDashboardPage() {
                         </div>
                         <div className="flex flex-col text-black space-y-2">
                             <label className="text-black font-bold" htmlFor="stock">Stock</label> 
-                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, stock: e.target.value})} type="number" name="stock" id="stock" placeholder="0" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, stock: +e.target.value})} type="number" name="stock" id="stock" placeholder="0" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.stock && <p className="text-red-500 text-sm">{errorProduct.stock}</p>
                             }
                         </div>
                         <div className="flex flex-col text-black space-y-2">
                             <label className="text-black font-bold" htmlFor="price">Price</label> 
-                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, price: e.target.value})} type="number" name="price" id="price" placeholder="0" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setFormCreateProductData({...formCreateProductData, price: +e.target.value})} type="number" name="price" id="price" placeholder="0" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.price && <p className="text-red-500 text-sm">{errorProduct.price}</p>
                             }
@@ -191,12 +191,12 @@ function ManagerDashboardPage() {
                             }
 
                             <label className="text-black font-bold" htmlFor="stock">Stock</label> 
-                            <input onChange={(e) => setSelectedProduct({...selectedProduct, stock: e.target.value})} defaultValue={selectedProduct.stock} type="number" name="stock" id="stock" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setSelectedProduct({...selectedProduct, stock: +e.target.value})} defaultValue={selectedProduct.stock} type="number" name="stock" id="stock" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.stock && <p className="text-red-500 text-sm">{errorProduct.stock}</p>
                             }
                             <label className="text-black font-bold" htmlFor="price">Price</label> 
-                            <input onChange={(e) => setSelectedProduct({...selectedProduct, price: e.target.value})} defaultValue={selectedProduct.price} type="number" name="price" id="price" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setSelectedProduct({...selectedProduct, price: +e.target.value})} defaultValue={selectedProduct.price} type="number" name="price" id="price" className="p-2 rounded-lg"/>
                             {
                                 errorProduct.price && <p className="text-red-500 text-sm">{errorProduct.price}</p>
                             }
