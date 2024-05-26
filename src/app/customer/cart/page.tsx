@@ -99,6 +99,33 @@ function CartPage() {
             console.error('Error adding product to cart:', error);
         }
     };
+
+    const handleClearCart = async () => {
+        try {
+            const res = await axiosInstance.post(`/api/order/keranjang/clear`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setCart(res.data);
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+        }
+    };
+
+    const handleCheckout = async () => {
+        try {
+            const res = await axiosInstance.post(`/api/order/checkout`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            // Handle checkout response as needed
+            console.log('Checkout successful:', res.data);
+        } catch (error) {
+            console.error('Error during checkout:', error);
+        }
+    };
     
 
     if (!cart) return <div>Loading...</div>;
@@ -153,6 +180,20 @@ function CartPage() {
                             {displayedItems}
                         </article>
                     </div>
+                </div>
+                <div className="flex justify-between w-full px-8 my-8">
+                    <button
+                        onClick={handleClearCart}
+                        className="bg-yellow-500 text-white p-2 rounded-lg"
+                    >
+                        Clear Cart
+                    </button>
+                    <button
+                        onClick={handleCheckout}
+                        className="bg-blue-500 text-white p-2 rounded-lg"
+                    >
+                        Checkout
+                    </button>
                 </div>
             </section>
         </>

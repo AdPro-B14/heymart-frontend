@@ -6,7 +6,8 @@ import withManager from "@/hoc/with_manager";
 import withAuth from "@/hoc/with_auth";
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth_context";
 
 
@@ -34,6 +35,7 @@ function ProductPage( { params }: {
     const [error, setError] = useState<string | null>(null);
     
     const { user, isLoggedIn } = useAuth();
+    const router = useRouter();
 
     const [openEditModal, setOpenEditModal] = useState(false);
 
@@ -94,6 +96,25 @@ function ProductPage( { params }: {
             });
     }, [openEditModal]);
 
+    useEffect(() => {
+        const checkAndCreateCart = async () => {
+            try {
+                const cartRes = await axiosInstance.get(`/api/order/keranjang`);
+                // if (!cartRes.data) {
+                //     await axiosInstance.post(`/api/order/keranjang/create`);
+                //     console.log('Cart created');
+                // } else {
+                    console.log('Cart exists');
+                // }
+            } catch (err) {
+                await axiosInstance.post(`/api/order/keranjang/create`);
+                console.log("Cart created");
+            }
+        };
+
+        checkAndCreateCart();
+    }, []);
+
     const displayedItems = products
         .map((item) => (
             <div key={`product-${item.id}`} id={`product-${item.id}`} onClick={() => { setOpenEditModal(true); setSelectedProduct(item); }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
@@ -124,6 +145,14 @@ function ProductPage( { params }: {
                             {displayedItems}
                         </article>
                     </div>
+                </div>
+                <div className="flex justify-center w-full my-4">
+                    <button
+                        onClick={() => router.push('/customer/cart')}
+                        className="bg-blue-500 text-white p-2 rounded-lg"
+                    >
+                        Go to Cart
+                    </button>
                 </div>
                 <Modal title="Product" open={openEditModal} onClose={() => setOpenEditModal(!openEditModal)} className="w-[700px]">
                     <form onSubmit={handleEditProduct} className="space-y-6 flex flex-col">
