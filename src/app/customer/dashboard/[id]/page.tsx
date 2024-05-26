@@ -26,6 +26,22 @@ interface Product {
     supermarketId: number;
 }
 
+interface TransactionCoupon {
+    couponId: string;
+    supermarketId: number;
+    couponName: string;
+    couponNominal: number;
+    minimumBuy: number;
+}
+
+interface ProductCoupon {
+    couponId: string;
+    supermarketId: number;
+    couponName: string;
+    couponNominal: number;
+    productId: string;
+}
+
 function ProductPage( { params }: {
     params: {id: String}
 }) {
@@ -38,6 +54,15 @@ function ProductPage( { params }: {
     const router = useRouter();
 
     const [openEditModal, setOpenEditModal] = useState(false);
+    const [openTransactionCouponModal, setOpenTransactionCouponModal] = useState(false);
+    const [openProductCouponModal, setOpenProductCouponModal] = useState(false);
+
+
+    const [coupons, setCoupons] = useState<TransactionCoupon[]>([]);
+    const [productCoupons, setProductCoupons] = useState<ProductCoupon[]>([]);
+
+
+
 
     const handleEditProduct = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -67,6 +92,28 @@ function ProductPage( { params }: {
         setOpenEditModal(false);
     }
 
+    const handleFetchTransactionCoupons = async () => {
+        console.log("Fetching coupons...");
+        try {
+            const res = await axiosInstance.get(`/api/order/transaction-coupon/supermarket-transaction-coupon/${params.id}`);
+            console.log("Coupons:", res.data); 
+            setCoupons(res.data);
+            setOpenTransactionCouponModal(true); 
+        } catch (error) {
+            console.error("Error fetching coupons:", error);
+        }
+    };
+
+    const handleFetchProductCoupons = async () => {
+        console.log("Fetching coupons...");
+        try {
+            const res = await axiosInstance.get(`/api/order/product-coupon/supermarket-product-coupon/${params.id}`);
+            console.log("Coupons:", res.data); 
+            setProductCoupons(res.data);
+            setOpenProductCouponModal(true); 
+        } catch (error) {
+            console.error("Error fetching coupons:", error);
+        }
     const handleAddToCart = async () => {
         try {
             const res = await axiosInstance.post(`/api/order/keranjang/add-product`, {
@@ -165,6 +212,33 @@ function ProductPage( { params }: {
                         </div>
                     </form>
                 </Modal>
+                <Modal title="Coupons" open={openTransactionCouponModal} onClose={() => setOpenTransactionCouponModal(false)} className="w-[700px]">
+                    <div className="space-y-4">
+                        {coupons.map(coupon => (
+                            <div key={coupon.couponId}>
+                                <h1 className="font-bold text-black text-sm">{coupon.couponName}</h1>
+                                <h1 className="font-bold text-black text-sm">{coupon.couponNominal}</h1>
+                            </div>
+                        ))}
+                    </div>
+                </Modal>
+                <button onClick={handleFetchTransactionCoupons} className="absolute top-[130px] left-[100px] mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    See Transaction Coupons
+                </button>
+                <button onClick={handleFetchProductCoupons} className="absolute top-[130px] right-[100px] mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    See Product Coupons
+                </button>
+                <Modal title="Product Coupons" open={openProductCouponModal} onClose={() => setOpenProductCouponModal(false)} className="w-[700px]">
+                    <div className="space-y-4">
+                        {productCoupons.map(coupon => (
+                            <div key={coupon.couponId}>
+                                <h1 className="font-bold text-black text-sm">{coupon.couponName}</h1>
+                                <h1 className="font-bold text-black text-sm">{coupon.couponNominal}</h1>
+                            </div>
+                        ))}
+                    </div> 
+                </Modal> 
+                
                 <Modal title="Error" open={!!error} onClose={closeModal} className="w-[700px]">
                     <div className="text-center">Failed to add product to cart. Please try again.</div>
                 </Modal>
@@ -173,6 +247,7 @@ function ProductPage( { params }: {
 
         </>
     );
+}
 };
 
 export default ProductPage;
