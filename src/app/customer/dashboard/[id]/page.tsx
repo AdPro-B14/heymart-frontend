@@ -33,6 +33,14 @@ interface TransactionCoupon {
     minimumBuy: number;
 }
 
+interface ProductCoupon {
+    couponId: string;
+    supermarketId: number;
+    couponName: string;
+    couponNominal: number;
+    productId: string;
+}
+
 function ProductPage( { params }: {
     params: {id: String}
 }) {
@@ -43,10 +51,13 @@ function ProductPage( { params }: {
     const { user, isLoggedIn } = useAuth();
 
     const [openEditModal, setOpenEditModal] = useState(false);
-    const [openCouponModal, setOpenCouponModal] = useState(false);
+    const [openTransactionCouponModal, setOpenTransactionCouponModal] = useState(false);
+    const [openProductCouponModal, setOpenProductCouponModal] = useState(false);
 
 
     const [coupons, setCoupons] = useState<TransactionCoupon[]>([]);
+    const [productCoupons, setProductCoupons] = useState<ProductCoupon[]>([]);
+
 
 
 
@@ -78,35 +89,29 @@ function ProductPage( { params }: {
         setOpenEditModal(false);
     }
 
-    const handleFetchCoupons = async () => {
+    const handleFetchTransactionCoupons = async () => {
         console.log("Fetching coupons...");
         try {
             const res = await axiosInstance.get(`/api/order/transaction-coupon/supermarket-transaction-coupon/${params.id}`);
             console.log("Coupons:", res.data); 
             setCoupons(res.data);
-            setOpenCouponModal(true); 
+            setOpenTransactionCouponModal(true); 
         } catch (error) {
             console.error("Error fetching coupons:", error);
         }
     };
 
-    // const handleFetchCoupons = async () => {
-    //     // console.log("Selected Product:");
-    //     // console.log("Selected Product Supermarket ID:");
-
-    //     // if (!selectedProduct || !selectedProduct.supermarketId) {
-    //     //     console.error("No product selected or supermarketId is missing.");
-    //     //     return;
-    //     // }
-    //     // ${selectedProduct.supermarketId}
-    //     try {
-    //         const res = await axiosInstance.get(`/api/order/transaction-coupon/supermarket-transaction-coupon/${params.id}`);
-    //         // const res = await axiosInstance.get(`/api/order/transaction-coupon/all-transaction-coupon`);
-    //         setCoupons(res.data);
-    //     } catch (error) {
-    //         console.error("Error fetching coupons:", error);
-    //     }
-    // };
+    const handleFetchProductCoupons = async () => {
+        console.log("Fetching coupons...");
+        try {
+            const res = await axiosInstance.get(`/api/order/product-coupon/supermarket-product-coupon/${params.id}`);
+            console.log("Coupons:", res.data); 
+            setProductCoupons(res.data);
+            setOpenProductCouponModal(true); 
+        } catch (error) {
+            console.error("Error fetching coupons:", error);
+        }
+    };
     
     useEffect(() => {
         axiosInstance.get(`/api/store/product/all-product/${params.id}`)
@@ -160,7 +165,7 @@ function ProductPage( { params }: {
                         </div>
                     </form>
                 </Modal>
-                <Modal title="Coupons" open={openCouponModal} onClose={() => setOpenCouponModal(false)} className="w-[700px]">
+                <Modal title="Coupons" open={openTransactionCouponModal} onClose={() => setOpenTransactionCouponModal(false)} className="w-[700px]">
                     <div className="space-y-4">
                         {coupons.map(coupon => (
                             <div key={coupon.couponId}>
@@ -170,9 +175,23 @@ function ProductPage( { params }: {
                         ))}
                     </div>
                 </Modal>
-                <button onClick={handleFetchCoupons} className="absolute top-[130px] left-[100px] mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    See Coupons
+                <button onClick={handleFetchTransactionCoupons} className="absolute top-[130px] left-[100px] mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    See Transaction Coupons
                 </button>
+                <button onClick={handleFetchProductCoupons} className="absolute top-[130px] right-[100px] mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    See Product Coupons
+                </button>
+                <Modal title="Product Coupons" open={openProductCouponModal} onClose={() => setOpenProductCouponModal(false)} className="w-[700px]">
+                    <div className="space-y-4">
+                        {productCoupons.map(coupon => (
+                            <div key={coupon.couponId}>
+                                <h1 className="font-bold text-black text-sm">{coupon.couponName}</h1>
+                                <h1 className="font-bold text-black text-sm">{coupon.couponNominal}</h1>
+                            </div>
+                        ))}
+                    </div> 
+                </Modal> 
+                
             </section>
         </>
     );

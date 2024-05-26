@@ -21,6 +21,22 @@ interface Product {
     stock: number;
 }
 
+interface TransactionCoupon {
+    couponId: string;
+    supermarketId: number;
+    couponName: string;
+    couponNominal: number;
+    minimumBuy: number;
+}
+
+interface ProductCoupon {
+    couponId: string;
+    supermarketId: number;
+    couponName: string;
+    couponNominal: number;
+    productId: string;
+}
+
 function AdminDashboardPage() {
     const [supermarkets, setSupermarkets] = useState<Supermarket[]>([]);
     const [selectedSupermarket, setSelectedSupermarket] = useState<Supermarket>({ id: 0, name: "", managers: [], products: []});
