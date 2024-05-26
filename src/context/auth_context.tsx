@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 interface AuthContext {
     isLoggedIn: boolean;
     isLoading: boolean;
-    user: {name: string; email: string; role: string; balance: number}
+    user: {name: string; email: string; role: string; manager_supermarket_id: number; balance: number}
     token: string;
     login: (email: string, password: string) => void;
     logout: () => void;
@@ -23,6 +23,7 @@ export const AuthContext = createContext<AuthContext>({
         name: "",
         email: "",
         role: "",
+        manager_supermarket_id: 0,
         balance: 0
     },
     login: () => {},
@@ -37,6 +38,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         name: "",
         email: "",
         role: "",
+        manager_supermarket_id:0,
         balance: 0
     });
     const router = useRouter();
@@ -70,6 +72,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
             name: "",
             email: "",
             role: "",
+            manager_supermarket_id: 0,
             balance: 0
         });
         setIsLoggedIn(false);

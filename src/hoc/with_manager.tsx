@@ -13,7 +13,7 @@ const withManager = <T extends object>(Component: ComponentType<T>) => {
                 router.replace('/auth/login');
                 return;
             }
-            
+            console.info(user)
             if (user.role.toLowerCase() !== 'manager') {
                 router.replace(`/${user.role.toLowerCase()}/dashboard`);
             }
