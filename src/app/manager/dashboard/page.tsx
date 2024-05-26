@@ -99,8 +99,7 @@ function ManagerDashboardPage() {
         
         setErrorProduct(newError);
         if (!formIsValid) return;
-        
-        const res = await axiosInstance.put(`/api/store/product/edit`);
+        const res = await axiosInstance.post('/api/store/product/edit', selectedProduct);
         setOpenEditModal(false);
     }
 
@@ -192,14 +191,14 @@ function ManagerDashboardPage() {
                             }
 
                             <label className="text-black font-bold" htmlFor="stock">Stock</label> 
-                            <input onChange={(e) => setSelectedProduct({...selectedProduct, name: e.target.value})} defaultValue={selectedProduct.stock} type="number" name="stock" id="stock" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setSelectedProduct({...selectedProduct, stock: e.target.value})} defaultValue={selectedProduct.stock} type="number" name="stock" id="stock" className="p-2 rounded-lg"/>
                             {
-                                errorProduct.name && <p className="text-red-500 text-sm">{errorProduct.name}</p>
+                                errorProduct.stock && <p className="text-red-500 text-sm">{errorProduct.stock}</p>
                             }
                             <label className="text-black font-bold" htmlFor="price">Price</label> 
-                            <input onChange={(e) => setSelectedProduct({...selectedProduct, name: e.target.value})} defaultValue={selectedProduct.price} type="number" name="price" id="price" className="p-2 rounded-lg"/>
+                            <input onChange={(e) => setSelectedProduct({...selectedProduct, price: e.target.value})} defaultValue={selectedProduct.price} type="number" name="price" id="price" className="p-2 rounded-lg"/>
                             {
-                                errorProduct.name && <p className="text-red-500 text-sm">{errorProduct.name}</p>
+                                errorProduct.price && <p className="text-red-500 text-sm">{errorProduct.price}</p>
                             }
 
                         </div>
