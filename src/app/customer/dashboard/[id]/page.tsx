@@ -31,6 +31,7 @@ function ProductPage( { params }: {
     
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product>({ id: "", name: "", price:0, stock:0, supermarketId: 0});
+    const [error, setError] = useState<string | null>(null);
     
     const { user, isLoggedIn } = useAuth();
 
@@ -57,12 +58,31 @@ function ProductPage( { params }: {
             newError.stock = "Stock is not valid";
         }
         
-        setErrorProduct(newError);
+        // setErrorProduct(newError);
         if (!formIsValid) return;
         
         const res = await axiosInstance.put(`/api/store/product/edit`);
         setOpenEditModal(false);
     }
+
+    const handleAddToCart = async () => {
+        try {
+            const res = await axiosInstance.post(`/api/order/keranjang/add-product`, {
+                productId: selectedProduct.id,
+                supermarketId: params.id 
+            });
+            console.log('Product added to cart:', res.data);
+            setOpenEditModal(false);
+        } catch (error) {
+            console.error('Error adding product to cart:', error);
+            setError('Failed to add product to cart. Please try again.');
+        }
+    };
+    
+    const closeModal = () => {
+        setOpenEditModal(false);
+        setError(null);
+    };
     
     useEffect(() => {
         axiosInstance.get(`/api/store/product/all-product/${params.id}`)
@@ -112,12 +132,16 @@ function ProductPage( { params }: {
 
                         </div>
                         <div className="space-y-2 my-2">
-                            <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add to Cart</button>
+                        <button type="button" onClick={handleAddToCart} className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add to Cart</button>
                         </div>
                     </form>
                 </Modal>
+                <Modal title="Error" open={!!error} onClose={closeModal} className="w-[700px]">
+                    <div className="text-center">Failed to add product to cart. Please try again.</div>
+                </Modal>
             
             </section>
+
         </>
     );
 };
