@@ -96,6 +96,25 @@ function ProductPage( { params }: {
             });
     }, [openEditModal]);
 
+    useEffect(() => {
+        const checkAndCreateCart = async () => {
+            try {
+                const cartRes = await axiosInstance.get(`/api/order/keranjang`);
+                // if (!cartRes.data) {
+                //     await axiosInstance.post(`/api/order/keranjang/create`);
+                //     console.log('Cart created');
+                // } else {
+                    console.log('Cart exists');
+                // }
+            } catch (err) {
+                await axiosInstance.post(`/api/order/keranjang/create`);
+                console.log("Cart created");
+            }
+        };
+
+        checkAndCreateCart();
+    }, []);
+
     const displayedItems = products
         .map((item) => (
             <div key={`product-${item.id}`} id={`product-${item.id}`} onClick={() => { setOpenEditModal(true); setSelectedProduct(item); }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
