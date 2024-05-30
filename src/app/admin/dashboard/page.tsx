@@ -191,7 +191,7 @@ function AdminDashboardPage() {
         //         .includes(searchQuery.trim().toLowerCase())
         // )
         .map((item) => (
-            <div key={`supermarket-${item.id}`} id={`supermarket-${item.id}`} onClick={() => { setOpenEditModal(true); setSelectedSupermarket(item); }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg space-y-4">
+            <div key={`supermarket-${item.id}`} id={`supermarket-${item.id}`} onClick={() => { setOpenEditModal(true); setSelectedSupermarket(item); }} className="flex flex-col rounded-lg w-[200px] h-[200px] bg-white items-center justify-center hover:cursor-pointer hover:drop-shadow-lg">
                 <Image src={`https://ui-avatars.com/api/?rounded=true&name=${item.name}`} width={50} height={50} alt={item.name}/>
                 <h1 className="font-bold text-black text-sm">{item.name}</h1>
             </div>
@@ -238,9 +238,9 @@ function AdminDashboardPage() {
                                 Create new
                             </button>
                         </div>
-                        <article className="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-content-center justify-items-center p-2">
+                        <div className="w-full h-[500px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center overflow-scroll">
                             {displayedItems}
-                        </article>
+                        </div>
                     </div>
                 </div>
                 {/* create supermarket modal */}
