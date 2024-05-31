@@ -17,7 +17,7 @@ const ManagerBalancePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    axiosInstance.get('/api/order/supermarket-balance/get-manager-balance/')
+    axiosInstance.get('https://heymart-order-production-qwmmsp4gka-et.a.run.app/supermarket-balance/get-manager-balance/')
       .then(res => {
         setBalance(res.data);
         console.log(res.data);
@@ -38,7 +38,7 @@ const ManagerBalancePage: React.FC = () => {
   };
 
   const handleSaveNewAmount = () => {
-    axiosInstance.put('/api/order/supermarket-balance/withdraw', {
+    axiosInstance.put('https://heymart-order-production-qwmmsp4gka-et.a.run.app/supermarket-balance/withdraw', {
           amount: newAmount
       })
       .then(res => {

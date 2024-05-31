@@ -89,14 +89,14 @@ function ProductPage( { params }: {
         // setErrorProduct(newError);
         if (!formIsValid) return;
         
-        const res = await axiosInstance.put(`/api/store/product/edit`);
+        const res = await axiosInstance.put(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/edit`);
         setOpenEditModal(false);
     }
 
     const handleFetchTransactionCoupons = async () => {
         console.log("Fetching coupons...");
         try {
-            const res = await axiosInstance.get(`/api/order/transaction-coupon/supermarket-transaction-coupon/${params.id}`);
+            const res = await axiosInstance.get(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/transaction-coupon/supermarket-transaction-coupon/${params.id}`);
             console.log("Coupons:", res.data); 
             setCoupons(res.data);
             setOpenTransactionCouponModal(true); 
@@ -108,7 +108,7 @@ function ProductPage( { params }: {
     const handleFetchProductCoupons = async () => {
         console.log("Fetching coupons...");
         try {
-            const res = await axiosInstance.get(`/api/order/product-coupon/supermarket-product-coupon/${params.id}`);
+            const res = await axiosInstance.get(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/product-coupon/supermarket-product-coupon/${params.id}`);
             console.log("Coupons:", res.data); 
             setProductCoupons(res.data);
             setOpenProductCouponModal(true); 
@@ -119,7 +119,7 @@ function ProductPage( { params }: {
         
     const handleAddToCart = async () => {
         try {
-            const res = await axiosInstance.post(`/api/order/keranjang/add-product`, {
+            const res = await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang/add-product`, {
                 productId: selectedProduct.id,
                 supermarketId: params.id 
             });
@@ -137,7 +137,7 @@ function ProductPage( { params }: {
     };
     
     useEffect(() => {
-        axiosInstance.get(`/api/store/product/all-product/${params.id}`)
+        axiosInstance.get(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/all-product/${params.id}`)
             .then(res => {
                 setProducts(res.data);
                 console.log(res.data);
@@ -149,15 +149,15 @@ function ProductPage( { params }: {
     useEffect(() => {
         const checkAndCreateCart = async () => {
             try {
-                const cartRes = await axiosInstance.get(`/api/order/keranjang`);
+                const cartRes = await axiosInstance.get(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang`);
                 // if (!cartRes.data) {
-                //     await axiosInstance.post(`/api/order/keranjang/create`);
+                //     await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang/create`);
                 //     console.log('Cart created');
                 // } else {
                     console.log('Cart exists');
                 // }
             } catch (err) {
-                await axiosInstance.post(`/api/order/keranjang/create`);
+                await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang/create`);
                 console.log("Cart created");
             }
         };

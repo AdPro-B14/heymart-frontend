@@ -72,7 +72,7 @@ function AdminDashboardPage() {
         setErrorSupermarket(newError);
         if (!formIsValid) return;
         
-        const res = await axiosInstance.post('/api/store/supermarket/create-supermarket', formCreateSupermarketData);
+        const res = await axiosInstance.post('https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/create-supermarket', formCreateSupermarketData);
         setOpenCreateModal(false);
     }
 
@@ -90,13 +90,13 @@ function AdminDashboardPage() {
         setErrorSupermarket(newError);
         if (!formIsValid) return;
         
-        await axiosInstance.put(`/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}`, selectedSupermarket);
+        await axiosInstance.put(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/edit-supermarket/${selectedSupermarket.id}`, selectedSupermarket);
         setOpenEditModal(false);
     }
 
     const handleDeleteSupermarket = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        await axiosInstance.delete(`/api/store/supermarket/delete-supermarket/${selectedSupermarket.id}`);
+        await axiosInstance.delete(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/delete-supermarket/${selectedSupermarket.id}`);
         setOpenEditModal(false);
     }
 
@@ -124,9 +124,9 @@ function AdminDashboardPage() {
         setErrorManager(newError);
         if (!formIsValid) return;
         
-        const res = await axiosInstance.put(`/api/store/supermarket/add-manager/${selectedSupermarket.id}`, formAddManagerData);
+        const res = await axiosInstance.put(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/add-manager/${selectedSupermarket.id}`, formAddManagerData);
         
-        axiosInstance.get('/api/store/supermarket/supermarket', { params: { id: selectedSupermarket.id } })
+        axiosInstance.get('https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/supermarket', { params: { id: selectedSupermarket.id } })
             .then(res => {
                 setSelectedSupermarket(res.data);
             }).catch(err => {
@@ -178,7 +178,7 @@ function AdminDashboardPage() {
     }
 
     useEffect(() => {
-        axiosInstance.get('/api/store/supermarket/all-supermarket')
+        axiosInstance.get('https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/all-supermarket')
             .then(res => {
                 setSupermarkets(res.data);
                 console.log(res.data);

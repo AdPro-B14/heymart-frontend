@@ -37,7 +37,7 @@ function CartPage() {
 
     const fetchCart = async () => {
         try {
-            const res = await axiosInstance.get(`/api/order/keranjang`, {
+            const res = await axiosInstance.get(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -56,7 +56,7 @@ function CartPage() {
     
             for (const productId of productIds) {
                 try {
-                    const res = await axiosInstance.get(`/api/store/product/findById/${productId}`);
+                    const res = await axiosInstance.get(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/findById/${productId}`);
                     fetchedProducts.push(res.data);
                 } catch (error) {
                     console.error(`Error fetching product with ID ${productId}:`, error);
@@ -71,7 +71,7 @@ function CartPage() {
 
     const handleRemoveFromCart = async (productId: string) => {
         try {
-            const res = await axiosInstance.post(`/api/order/keranjang/remove-product`, {
+            const res = await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang/remove-product`, {
                 productId: productId
             }, {
                 headers: {
@@ -86,7 +86,7 @@ function CartPage() {
 
     const handleAddToCart = async (productId: string) => {
         try {
-            const res = await axiosInstance.post(`/api/order/keranjang/add-product`, {
+            const res = await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang/add-product`, {
                 productId: productId,
                 supermarketId : cart?.supermarketId
             }, {
@@ -102,7 +102,7 @@ function CartPage() {
 
     const handleClearCart = async () => {
         try {
-            const res = await axiosInstance.post(`/api/order/keranjang/clear`, {}, {
+            const res = await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/keranjang/clear`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -115,7 +115,7 @@ function CartPage() {
 
     const handleCheckout = async () => {
         try {
-            const res = await axiosInstance.post(`/api/order/checkout`, {}, {
+            const res = await axiosInstance.post(`https://heymart-order-production-qwmmsp4gka-et.a.run.app/checkout`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -17,7 +17,7 @@ const CustomerBalancePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    axiosInstance.get('/api/order/customer-balance/get-balance')
+    axiosInstance.get('https://heymart-order-production-qwmmsp4gka-et.a.run.app/customer-balance/get-balance')
       .then(res => {
         setBalance(res.data);
         console.log(res.data);
@@ -38,7 +38,7 @@ const CustomerBalancePage: React.FC = () => {
   };
 
   const handleSaveNewAmount = () => {
-    axiosInstance.put('/api/order/customer-balance/top-up', {
+    axiosInstance.put('https://heymart-order-production-qwmmsp4gka-et.a.run.app/customer-balance/top-up', {
           amount: newAmount
       })
       .then(res => {

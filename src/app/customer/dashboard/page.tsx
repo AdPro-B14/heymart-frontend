@@ -29,7 +29,7 @@ function AdminDashboardPage() {
     const router = useRouter();
 
     useEffect(() => {
-        axiosInstance.get('/api/store/supermarket/all-supermarket')
+        axiosInstance.get('https://heymart-store-production-qwmmsp4gka-et.a.run.app/supermarket/all-supermarket')
             .then(res => {
                 setSupermarkets(res.data);
                 console.log(res.data);

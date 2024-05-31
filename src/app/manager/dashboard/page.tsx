@@ -84,7 +84,7 @@ function ManagerDashboardPage() {
         if (!formIsValid) return;
         try {
             formCreateProductData.supermarketId = user.manager_supermarket_id;
-            const res = await axiosInstance.post('/api/store/product/create', formCreateProductData);
+            const res = await axiosInstance.post('https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/create', formCreateProductData);
             setOpenCreateModal(false);
         } 
         catch (error) {
@@ -116,13 +116,13 @@ function ManagerDashboardPage() {
         
         setErrorProduct(newError);
         if (!formIsValid) return;
-        const res = await axiosInstance.post('/api/store/product/edit', selectedProduct);
+        const res = await axiosInstance.post('https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/edit', selectedProduct);
         setOpenEditModal(false);
     }
 
     const handleDeleteProduct = async () => {
         try {
-            const res = await axiosInstance.post('/api/store/product/delete', { UUID: selectedProduct.id });
+            const res = await axiosInstance.post('https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/delete', { UUID: selectedProduct.id });
             setOpenEditModal(false);
         } 
         catch (error) {
@@ -158,18 +158,18 @@ function ManagerDashboardPage() {
         try {
             formCreateCouponData.supermarketId = user.manager_supermarket_id;
 
-            const res = await axiosInstance.post('/api/order/transaction-coupon/create-transaction-coupon', formCreateCouponData);
+            const res = await axiosInstance.post('https://heymart-order-production-qwmmsp4gka-et.a.run.app/transaction-coupon/create-transaction-coupon', formCreateCouponData);
             // Handle successful response
           } catch (error) {
             console.error('Error creating transaction coupon:', error);
             // Handle error (e.g., display error message to the user)
           }
-        // const res = await axiosInstance.post('/api/order/transaction-coupon/create-transaction-coupon', formCreateCouponData);
+        // const res = await axiosInstance.post('https://heymart-order-production-qwmmsp4gka-et.a.run.app/transaction-coupon/create-transaction-coupon', formCreateCouponData);
         setOpenCouponModal(false);
     }
 
     useEffect(() => {
-        axiosInstance.get(`/api/store/product/all-product/${user.manager_supermarket_id}`)
+        axiosInstance.get(`https://heymart-store-production-qwmmsp4gka-et.a.run.app/product/all-product/${user.manager_supermarket_id}`)
             .then(res => {
                 setProducts(res.data);
                 console.log(res.data);

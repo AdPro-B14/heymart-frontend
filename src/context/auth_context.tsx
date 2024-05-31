@@ -45,13 +45,13 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     const login = async (email: string, password: string) => {
         try {
-            const login_response = await axiosInstance.post('/api/auth/login', { email, password });
+            const login_response = await axiosInstance.post('https://heymart-auth-production-qwmmsp4gka-et.a.run.app/api/auth/login', { email, password });
 
             if (login_response.status === 200) {
                 localStorage.setItem('token', login_response.data.token);
                 setToken(login_response.data.token);
 
-                const user_response = await axiosInstance.get('/api/user/profile');
+                const user_response = await axiosInstance.get('https://heymart-auth-production-qwmmsp4gka-et.a.run.app/api/user/profile');
                 setUser(user_response.data);
                 setIsLoggedIn(true);
 
@@ -87,7 +87,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
                 setIsLoading(false);
             } else {
                 setToken(token);
-                axiosInstance.get(`/api/user/profile`)
+                axiosInstance.get(`https://heymart-auth-production-qwmmsp4gka-et.a.run.app/api/user/profile`)
                     .then(res => {
                         setUser(res.data);
                         setIsLoading(false);

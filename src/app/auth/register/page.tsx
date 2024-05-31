@@ -36,7 +36,7 @@ export default function SignUpPage() {
         setError(newError);
         if (!formIsValid) return;
         
-        const res = await axiosInstance.post('/api/auth/signup', formData);
+        const res = await axiosInstance.post('https://heymart-auth-production-qwmmsp4gka-et.a.run.app/api/auth/signup', formData);
 
         if (res.status === 200) {
             toast.success("Sign up successful");
