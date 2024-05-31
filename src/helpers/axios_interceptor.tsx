@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+    baseURL: "http://localhost:3031",
 });
 
 axiosInstance.interceptors.request.use(
@@ -13,6 +13,7 @@ axiosInstance.interceptors.request.use(
         return config;
     },
     (error) => {
+        console.log(error);
         return Promise.reject(error);
     }
 );

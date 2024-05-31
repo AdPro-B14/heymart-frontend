@@ -54,7 +54,7 @@ function AdminDashboardPage() {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openManagerModal, setOpenManagerModal] = useState(false);
     const [openCouponModal, setOpenCouponModal] = useState(false);
-    const [errorCoupon, setErrorCoupon] = useState({ couponName: "", couponNominal: "", minimumBuy: "" }); // Define errorCoupon state variable
+    const [errorCoupon, setErrorCoupon] = useState({ supermarketId: "", couponName: "", couponNominal: "", minimumBuy: "" }); // Define errorCoupon state variable
 
 
 
@@ -91,7 +91,7 @@ function AdminDashboardPage() {
         if (!formIsValid) return;
         
         console.log(selectedSupermarket);
-        const res = await axiosInstance.put(`/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}`, selectedSupermarket);
+        const res = await axiosInstance.put('/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}', selectedSupermarket);
         setOpenEditModal(false);
     }
 
@@ -335,6 +335,13 @@ function AdminDashboardPage() {
                 </Modal>
                 <Modal open={openCouponModal} onClose={() => setOpenCouponModal(!openCouponModal)} className="w-[700px]">
                 <form onSubmit={handleCreateCoupon} className="space-y-6">
+                    <div className="flex flex-col text-black space-y-2">
+                        <label className="text-black font-bold" htmlFor="supermarketId">Supermarket ID</label> 
+                        <input onChange={(e) => setFormCreateCouponData({...formCreateCouponData, supermarketId: parseInt(e.target.value)})} type="number" name="supermarketId" id="supermarketId" className="p-2 rounded-lg"/>
+                        {
+                            errorCoupon.supermarketId && <p className="text-red-500 text-sm">{errorCoupon.supermarketId}</p>
+                        }
+                    </div>
                     <div className="flex flex-col text-black space-y-2">
                         <label className="text-black font-bold" htmlFor="couponName">Coupon Name</label> 
                         <input onChange={(e) => setFormCreateCouponData({...formCreateCouponData, couponName: e.target.value})} type="text" name="couponName" id="couponName" className="p-2 rounded-lg"/>
