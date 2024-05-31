@@ -50,6 +50,14 @@ function AdminDashboardPage() {
         <>
             <title>Customer Dashboard</title>
             <section className="flex flex-col bg-light-green min-h-screen items-start justify-start pt-[100px] min-w-svw max-w-svw">
+            <div className="flex justify-center w-full my-4">
+                    <button
+                        onClick={() => router.push('/customer/balance')}
+                        className="bg-dark-green-3 text-white p-2 rounded-lg"
+                    >
+                        Balance
+                    </button>
+                </div>
                 <div className="px-8 w-full my-8">
                     <div className="w-full h-[600px] bg-white/30 backdrop-blur-lg z-1 rounded-lg">
                         <article className="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-content-center justify-items-center p-2">

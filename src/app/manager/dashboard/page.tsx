@@ -6,7 +6,7 @@ import withManager from "@/hoc/with_manager";
 import withAuth from "@/hoc/with_auth";
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth_context";
 
 
@@ -36,7 +36,7 @@ function ManagerDashboardPage() {
         supermarketId:0
     });
     const { user, isLoggedIn } = useAuth();
-
+    const router = useRouter();
     const [errorProduct, setErrorProduct] = useState({ name: "", price: "", stock: ""  });
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -147,6 +147,14 @@ function ManagerDashboardPage() {
                             {products.length}
                         </h1>
                     </div>
+                </div>
+                <div className="flex justify-center w-full my-4">
+                    <button
+                        onClick={() => router.push('/manager/balance')}
+                        className="bg-dark-green-3 text-white p-2 rounded-lg"
+                    >
+                        Balance
+                    </button>
                 </div>
                 <div className="px-8 w-full my-8">
                     <div className="w-full h-[600px] bg-white/30 backdrop-blur-lg z-1 rounded-lg">

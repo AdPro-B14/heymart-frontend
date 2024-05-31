@@ -37,7 +37,9 @@ const CustomerBalancePage: React.FC = () => {
   };
 
   const handleSaveNewAmount = () => {
-    axiosInstance.put('/api/order/customer-balance/top-up', { amount: newAmount })
+    axiosInstance.put('/api/order/customer-balance/top-up', {
+          amount: newAmount
+      })
       .then(res => {
         setBalance(res.data);
         setIsModalOpen(false);
@@ -58,9 +60,9 @@ const CustomerBalancePage: React.FC = () => {
                   <h1 className="text-4xl font-bold mb-4">Customer Balance</h1>
                   <p className="text-2xl mb-2">ID: {balance.id}</p>
                   <p className="text-2xl mb-2">Customer ID: {balance.customerId}</p>
-                  <p className="text-2xl mb-4">Amount: {balance.amount}</p>
+                  <p className="text-2xl mb-4">Amount: Rp{balance.amount}</p>
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded"
                     onClick={handleOpenModal}
                   >
                     Top Up
