@@ -90,8 +90,13 @@ function AdminDashboardPage() {
         setErrorSupermarket(newError);
         if (!formIsValid) return;
         
-        console.log(selectedSupermarket);
-        const res = await axiosInstance.put('/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}', selectedSupermarket);
+        await axiosInstance.put(`/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}`, selectedSupermarket);
+        setOpenEditModal(false);
+    }
+
+    const handleDeleteSupermarket = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        await axiosInstance.delete(`/api/store/supermarket/delete-supermarket/${selectedSupermarket.id}`);
         setOpenEditModal(false);
     }
 
@@ -307,6 +312,7 @@ function AdminDashboardPage() {
                             }
                         </div> */}
                         <div className="space-y-2 my-2">
+                            <button onClick={handleDeleteSupermarket} className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Delete</button>
                             <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-slate-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Done</button>
                         </div>
                     </form>
