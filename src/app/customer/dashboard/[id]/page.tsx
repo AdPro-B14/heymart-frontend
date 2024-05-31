@@ -114,6 +114,8 @@ function ProductPage( { params }: {
         } catch (error) {
             console.error("Error fetching coupons:", error);
         }
+    };
+        
     const handleAddToCart = async () => {
         try {
             const res = await axiosInstance.post(`/api/order/keranjang/add-product`, {
@@ -247,7 +249,7 @@ function ProductPage( { params }: {
 
         </>
     );
-}
+
 };
 
 export default ProductPage;
