@@ -25,6 +25,14 @@ interface Product {
     supermarketId: number;
 }
 
+interface Coupon {
+    couponId: string;
+    supermarketId: number;
+    couponName: string;
+    couponNominal: number;
+    minimumBuy: number;
+}
+
 function ManagerDashboardPage() {
     
     const [products, setProducts] = useState<Product[]>([]);
@@ -35,11 +43,20 @@ function ManagerDashboardPage() {
         stock: 0,
         supermarketId:0
     });
+    const [formCreateCouponData, setFormCreateCouponData] = useState<Coupon>({
+        couponId: "",
+        supermarketId: 0,
+        couponName: "",
+        couponNominal: 0,
+        minimumBuy: 0
+    });
     const { user, isLoggedIn } = useAuth();
 
     const [errorProduct, setErrorProduct] = useState({ name: "", price: "", stock: ""  });
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
+    const [openCouponModal, setOpenCouponModal] = useState(false);
+    const [errorCoupon, setErrorCoupon] = useState({ supermarketId: "", couponName: "", couponNominal: "", minimumBuy: "" }); // Define errorCoupon state variable
 
     const handleCreateProduct = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -114,6 +131,43 @@ function ManagerDashboardPage() {
         }
     }
 
+    const handleCreateCoupon = async (event: FormEvent<HTMLFormElement>) => {
+        // Function to create a new coupon
+        event.preventDefault();
+
+        const newError = { couponName: "", couponNominal: "", minimumBuy: "" };
+        let formIsValid = true;
+
+        if (!formCreateCouponData.couponName) {
+            formIsValid = false;
+            newError.couponName = "Coupon name is required";
+        }
+        
+        if (formCreateCouponData.couponNominal <= 0) {
+            formIsValid = false;
+            newError.couponNominal = "Coupon nominal must be greater than 0";
+        }
+        
+        if (formCreateCouponData.minimumBuy <= 0) {
+            formIsValid = false;
+            newError.minimumBuy = "Minimum buy must be greater than 0";
+        }
+
+        setErrorCoupon(newError);
+        if (!formIsValid) return;
+        try {
+            formCreateCouponData.supermarketId = user.manager_supermarket_id;
+
+            const res = await axiosInstance.post('/api/order/transaction-coupon/create-transaction-coupon', formCreateCouponData);
+            // Handle successful response
+          } catch (error) {
+            console.error('Error creating transaction coupon:', error);
+            // Handle error (e.g., display error message to the user)
+          }
+        // const res = await axiosInstance.post('/api/order/transaction-coupon/create-transaction-coupon', formCreateCouponData);
+        setOpenCouponModal(false);
+    }
+
     useEffect(() => {
         axiosInstance.get(`/api/store/product/all-product/${user.manager_supermarket_id}`)
             .then(res => {
@@ -150,7 +204,10 @@ function ManagerDashboardPage() {
                 </div>
                 <div className="px-8 w-full my-8">
                     <div className="w-full h-[600px] bg-white/30 backdrop-blur-lg z-1 rounded-lg">
-                        <div className="flex justify-end px-5">
+                        <div className="flex justify-between px-5">
+                            <button onClick={() => setOpenCouponModal(true)} className="my-5 h-[50px] w-[120px] focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                                Create New Coupon
+                            </button>
                             <button onClick={(e) => setOpenCreateModal(!openCreateModal)} className="my-5 h-[50px] w-[120px] focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                 {/* <Image src="/vercel.svg" className="text-slate-100" alt="plus icon" width={40} height={40} /> */}
                                 Create new
@@ -219,7 +276,33 @@ function ManagerDashboardPage() {
                         </div>
                     </form>
                 </Modal>
-            
+                <Modal open={openCouponModal} onClose={() => setOpenCouponModal(!openCouponModal)} className="w-[700px]">
+                <form onSubmit={handleCreateCoupon} className="space-y-6">
+
+                    <div className="flex flex-col text-black space-y-2">
+                        <label className="text-black font-bold" htmlFor="couponName">Coupon Name</label> 
+                        <input onChange={(e) => setFormCreateCouponData({...formCreateCouponData, couponName: e.target.value})} type="text" name="couponName" id="couponName" className="p-2 rounded-lg"/>
+                        {
+                            errorCoupon.couponName && <p className="text-red-500 text-sm">{errorCoupon.couponName}</p>
+                        }
+                    </div>
+                    <div className="flex flex-col text-black space-y-2">
+                        <label className="text-black font-bold" htmlFor="couponNominal">Coupon Nominal</label> 
+                        <input onChange={(e) => setFormCreateCouponData({...formCreateCouponData, couponNominal: parseInt(e.target.value)})} type="number" name="couponNominal" id="couponNominal" className="p-2 rounded-lg"/>
+                        {
+                            errorCoupon.couponNominal && <p className="text-red-500 text-sm">{errorCoupon.couponNominal}</p>
+                        }
+                    </div>
+                    <div className="flex flex-col text-black space-y-2">
+                        <label className="text-black font-bold" htmlFor="minimumBuy">Minimum Buy</label> 
+                        <input onChange={(e) => setFormCreateCouponData({...formCreateCouponData, minimumBuy: parseInt(e.target.value)})} type="number" name="minimumBuy" id="minimumBuy" className="p-2 rounded-lg"/>
+                        {
+                            errorCoupon.minimumBuy && <p className="text-red-500 text-sm">{errorCoupon.minimumBuy}</p>
+                        }
+                    </div>
+                    <button type="submit" className="w-full focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5">Create Coupon</button>
+                </form>
+            </Modal>
             </section>
         </>
     );

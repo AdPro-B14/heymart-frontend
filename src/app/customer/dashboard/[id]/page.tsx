@@ -218,8 +218,9 @@ function ProductPage( { params }: {
                     <div className="space-y-4">
                         {coupons.map(coupon => (
                             <div key={coupon.couponId}>
-                                <h1 className="font-bold text-black text-sm">{coupon.couponName}</h1>
-                                <h1 className="font-bold text-black text-sm">{coupon.couponNominal}</h1>
+                                <h1 className="font-bold text-black text-lg">{coupon.couponName}</h1>
+                                <h1 className="font-bold text-black text-sm">nominal: {coupon.couponNominal}</h1>
+                                <h1 className="font-bold text-black text-sm">minimum belanja: {coupon.minimumBuy}</h1>
                             </div>
                         ))}
                     </div>
@@ -234,8 +235,8 @@ function ProductPage( { params }: {
                     <div className="space-y-4">
                         {productCoupons.map(coupon => (
                             <div key={coupon.couponId}>
-                                <h1 className="font-bold text-black text-sm">{coupon.couponName}</h1>
-                                <h1 className="font-bold text-black text-sm">{coupon.couponNominal}</h1>
+                                <h1 className="font-bold text-black text-lg">{coupon.couponName}</h1>
+                                <h1 className="font-bold text-black text-sm">nominal: {coupon.couponNominal}</h1>
                             </div>
                         ))}
                     </div> 
