@@ -56,7 +56,7 @@ function ManagerDashboardPage() {
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openCouponModal, setOpenCouponModal] = useState(false);
-    const [errorCoupon, setErrorCoupon] = useState({ supermarketId: "", couponName: "", couponNominal: "", minimumBuy: "" }); // Define errorCoupon state variable
+    const [errorCoupon, setErrorCoupon] = useState({ couponName: "", couponNominal: "", minimumBuy: "" }); // Define errorCoupon state variable
 
     const handleCreateProduct = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

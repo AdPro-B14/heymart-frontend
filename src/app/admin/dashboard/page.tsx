@@ -136,8 +136,13 @@ function AdminDashboardPage() {
         // Function to create a new coupon
         event.preventDefault();
 
-        const newError = { couponName: "", couponNominal: "", minimumBuy: "" };
+        const newError = { supermarketId: "", couponName: "", couponNominal: "", minimumBuy: "" };
         let formIsValid = true;
+
+        if (!formCreateCouponData.supermarketId) {
+            formIsValid = false;
+            newError.supermarketId = "Supermarket id is required";
+        }
 
         if (!formCreateCouponData.couponName) {
             formIsValid = false;

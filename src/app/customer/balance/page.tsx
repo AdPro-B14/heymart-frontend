@@ -3,6 +3,7 @@
 import Modal from "@/components/modal";
 import React, { FormEvent, useEffect, useState } from 'react';
 import axiosInstance from "@/helpers/axios_interceptor";
+import withCustomer from "@/hoc/with_customer";
 
 interface CustomerBalance {
   id: number;
@@ -121,4 +122,4 @@ const CustomerBalancePage: React.FC = () => {
   );
 };
 
-export default CustomerBalancePage;
+export default withCustomer(CustomerBalancePage);

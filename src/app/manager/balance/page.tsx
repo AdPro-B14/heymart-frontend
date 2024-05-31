@@ -3,6 +3,7 @@
 import Modal from "@/components/modal";
 import React, { FormEvent, useEffect, useState } from 'react';
 import axiosInstance from "@/helpers/axios_interceptor";
+import withManager from "@/hoc/with_manager";
 
 interface SupermarketBalance {
   id: number;
@@ -121,4 +122,4 @@ const ManagerBalancePage: React.FC = () => {
   );
 };
 
-export default ManagerBalancePage;
+export default withManager(ManagerBalancePage);

@@ -9,6 +9,7 @@ import { FormEvent, useEffect, useState } from "react";
 // import { useRouter } from 'next/router';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth_context";
+import withCustomer from "@/hoc/with_customer";
 
 
 interface Supermarket {
@@ -253,4 +254,4 @@ function ProductPage( { params }: {
 
 };
 
-export default ProductPage;
+export default withCustomer(ProductPage);
