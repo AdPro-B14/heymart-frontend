@@ -13,7 +13,7 @@ export default function NavBar () {
 
     const handleLogout = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+        setOpenUserMenu(false);
         logout();
     }
     
