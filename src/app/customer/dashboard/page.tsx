@@ -60,7 +60,7 @@ function AdminDashboardPage() {
                 </div>
                 <div className="px-8 w-full my-8">
                     <div className="w-full h-[600px] bg-white/30 backdrop-blur-lg z-1 rounded-lg">
-                        <article className="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-content-center justify-items-center p-2">
+                        <article className="w-full h-[500px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center overflow-scroll">
                             {displayedItems}
                         </article>
                     </div>

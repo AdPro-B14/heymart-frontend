@@ -56,7 +56,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
                 setIsLoggedIn(true);
 
                 toast.success("Login successful");
-                router.push('/admin/dashboard');
+                router.push(`/${user_response.data['role'].toLowerCase()}/dashboard`);
             } else {
                 toast.error("Login failed");
             }

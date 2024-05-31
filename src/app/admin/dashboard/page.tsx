@@ -248,9 +248,9 @@ function AdminDashboardPage() {
                                 Create new
                             </button>
                         </div>
-                        <div className="w-full h-[500px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center overflow-scroll">
+                        <article className="w-full h-[500px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center overflow-scroll">
                             {displayedItems}
-                        </div>
+                        </article>
                     </div>
                 </div>
                 {/* create supermarket modal */}
