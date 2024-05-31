@@ -23,11 +23,6 @@ export default function NavBar () {
                 <Image src="/logo.png" alt="logo" width={40} height={40} />
                 <h1 className="text-lg font-bold">HeyMart</h1>
             </div>
-            {/* <div className="flex items-center space-x-10">
-                <Link href="/">Home</Link>
-                <Link href="/about"></Link>
-                <Link href="/contact">Contact</Link>
-            </div> */}
             { isLoggedIn &&
             <div className="font-bold">
                 <div>

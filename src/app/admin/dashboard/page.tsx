@@ -91,7 +91,7 @@ function AdminDashboardPage() {
         if (!formIsValid) return;
         
         console.log(selectedSupermarket);
-        const res = await axiosInstance.put(`/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}`, selectedSupermarket);
+        const res = await axiosInstance.put('/api/store/supermarket/edit-supermarket/${selectedSupermarket.id}', selectedSupermarket);
         setOpenEditModal(false);
     }
 
